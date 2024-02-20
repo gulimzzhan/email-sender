@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Email Sender</title>
+</head>
+<body>
+    <h1 style="text-align: center; color: white;">Email Sender</h1>
+    <form id="emailForm" action="http://localhost:3000/" method="POST">
+        <label for="recipient">Receiver:</label>
+        <input type="email" id="recipient" name="recipient" required><br><br>
+        <label for="subject">Topic:</label>
+        <input type="text" id="subject" name="subject" required><br><br>
+        <label for="message">Message:</label><br>
+        <textarea id="message" name="message" rows="4" cols="50" required></textarea><br><br>
+        <button type="submit">Send</button>
+    </form>
+
+    <script>
+        // Function to handle form submission response
+        function handleResponse(response) {
+            alert(response); // Alert the user
+            location.reload(); // Reload the page after the alert is closed
+        }
+
+        // Submit form event listener
+        document.getElementById('emailForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission behavior
+
+            // Fetch form data using getElementById
+            const recipient = document.getElementById("recipient").value;
+            const subject = document.getElementById("subject").value;
+            const message = document.getElementById("message").value;
+
+            // Construct request body
+            const body = JSON.stringify({ recipient: recipient, subject: subject, message: message });
+
+            // Send form data as JSON to the server
+            fetch('http://localhost:3000/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: body
+            })
+            .then(response => response.text())
+            .then(data => handleResponse(data))
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
